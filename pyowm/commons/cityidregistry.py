@@ -44,9 +44,10 @@ class CityIDRegistry:
         # read and uncompress data from compressed DB
         subfolder, filename = os.path.split(sqlite_db_path)
         module_name = ".".join(__name__.split(".")[:-1])
-        with resources.path(f"{module_name}.{subfolder}", filename) as bz2_db_path:
-            with open(bz2_db_path, "rb") as bz2_db:
-                decompressed_data = bz2.BZ2File(bz2_db).read()
+        resource_path = resources.files(f"{module_name}.{subfolder}").joinpath(filename)
+
+        with resource_path.open("rb") as bz2_db:
+            decompressed_data = bz2.BZ2File(bz2_db).read()
 
         # dump decompressed data to a temp DB
         try:
